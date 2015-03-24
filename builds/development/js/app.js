@@ -1,7 +1,7 @@
 var waterApp = angular.module('waterApp', ['ui.router', 'firebase', 'appControllers', 'timer', 'angular.filter']);
 
 var appControllers = angular.module('appControllers', ['firebase'])
-	.constant('FIREBASE_URL', 'https://wixiw.firebaseio.com/');
+	.constant('FIREBASE_URL', 'SECRETS');
 
 waterApp.config(function($stateProvider, $urlRouterProvider) {
 
