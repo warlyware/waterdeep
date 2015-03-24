@@ -1,0 +1,31 @@
+<section>
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+
+	<div ng-show="signedIn()">
+		<h1>guild bank</h1>
+			<div>
+				<img src="./images/coin.gif" alt="" height="20px" width="20px"><span class="guildbank">{{guildbankAmt}} gp</span>
+			</div>
+
+	</div>	
+<!-- 
+			<div ng-repeat="(key,logitem) in guildbanklog | filter:'!'+logitem.postTime">	
+				<table class="log">
+					<tr>
+						<td>{{logitem.guildbankamount}} gp</td>
+						<td>posted: {{logitem.postTime}}</td>
+					</tr>
+					<tr>
+						<td>next row</td>
+						<td>2nd item</td>
+					</tr>
+				</table>				
+			</div> -->
+</section>

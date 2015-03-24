@@ -1,0 +1,28 @@
+
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+	<div ng-show="signedIn()">
+
+		<div class="propcontents">
+			<h1>property contents</h1>
+			<h3>{{whichuser}}</h3>
+
+
+			<ul class="packlist cf">
+				<li ng-repeat="item in contents">
+					<div class="pack">
+						<div class="info">
+							<h2>{{item.packtype}} ({{item.packvalue}})</h2>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+		</div>
+	</div>

@@ -1,0 +1,264 @@
+waterApp.controller('PropertiesController', function($scope, $rootScope, $interval, $timeout, $window, $firebase, $firebaseSimpleLogin, $state, $stateParams, FIREBASE_URL) {
+
+	var ref = new Firebase(FIREBASE_URL); // base url
+	var simpleLogin = $firebaseSimpleLogin(ref); // run simpleLogin on url 
+	$scope.window = $window;
+
+	simpleLogin.$getCurrentUser().then(function(authUser) { // get current user then...
+
+		if (authUser !== null) { // if passed in authUser exists then...
+
+			var ref = new Firebase(FIREBASE_URL + '/users/' + authUser.uid + '/properties'); // new ref for userID + properties
+			var propertiesInfo = $firebase(ref);
+
+			var charRef = new Firebase(FIREBASE_URL + '/users/' + authUser.uid + '/characters'); // new ref for userID + properties
+
+			var userCharactersArray = $firebase(charRef).$asArray();
+			var userCharactersObj = $firebase(charRef).$asObject();
+
+			var propertiesObj = $firebase(ref).$asObject(); // create properties object
+			var propertiesArray = $firebase(ref).$asArray(); // create property array
+
+			var counterRef = new Firebase(FIREBASE_URL + '/packscounter/');
+			var counterInfo = $firebase(counterRef);
+			var counterObj = $firebase(counterRef).$asObject();
+
+
+			counterObj.$loaded().then(function() {
+				$rootScope.howManyPacks = counterObj.counter; // load array into rootscope		
+			});
+
+			counterObj.$watch(function(event) {
+				$rootScope.howManyPacks = counterObj.counter; // load array into rootscope		
+			});
+
+			propertiesObj.$loaded().then(function(data) { // wait til properties object is loaded then...
+				$scope.properties = propertiesObj; // load object into scope
+
+			}); //properties object loaded
+
+			var whichProperty;
+			var whichPropStatus;
+
+
+			var statusCheck = function() {
+
+
+					angular.forEach(propertiesArray, function(val, key) {
+						if( !angular.isFunction(val)) {
+							angular.forEach(val, function(val, key) {
+								if(key == '$id') {
+									whichProperty = val;
+		 							var ref = new Firebase(FIREBASE_URL + '/users/' + authUser.uid + '/properties/' + whichProperty); 
+									var whichPropInfo = $firebase(ref);
+									var whichPropObj = whichPropInfo.$asObject();
+									var whichPropArray = whichPropInfo.$asArray();
+						
+									whichPropObj.$loaded().then(function() {
+										$scope.propObj = whichPropObj;
+									
+										$scope.propObj.$loaded().then(function(){
+											var dueunix;
+											var nowunix;
+
+											dueunix = $scope.propObj.propduemoment;
+											nowunix = moment().unix().toString();
+
+											var oldduedate = whichPropObj.propduedateiso;
+											var demodate = moment(oldduedate).add(7, 'days');
+											var demodateiso = moment(demodate).toISOString();
+											var demodateformatted = moment(demodate).format('ddd, MMM Do [at] h:mm a');
+											var timeBetween = dueunix-nowunix;
+											//Set status to overdue
+										    if (nowunix > dueunix) {
+												whichPropInfo.$update({ propstatus: 'overdue' });
+												whichPropInfo.$update({ propdemodateformatted: demodateformatted });
+												whichPropInfo.$update({ propdemodate: demodateiso });
+											} else if (timeBetween < 86400 && timeBetween > 0) { // Set due soon												
+												whichPropInfo.$update({ propstatus: 'duesoon' });
+										    } else  if (timeBetween < 0) { //Or set paid
+												whichPropInfo.$update({ propdemodate: '' });
+												whichPropInfo.$update({ propstatus: 'paid' });
+										    }
+
+										});								
+									});
+								}
+							});
+						}
+					});
+				}
+			
+			$timeout(function () {
+				statusCheck();
+			}, 100);
+			
+			$interval(function () {
+				statusCheck();
+				console.log("checked!");
+			}, 300000);
+
+
+			userCharactersObj.$loaded().then(function(data) { // wait til properties object is loaded then...
+				$scope.characters = userCharactersObj; // load object into scope
+			}); //properties object loaded
+
+
+			propertiesArray.$loaded().then(function(data) {
+				$rootScope.howManyProperties = propertiesArray.length; // load array into rootscope
+			}); //properties array loaded
+
+			propertiesArray.$watch(function(event) { // watch array for changes
+				$rootScope.howManyProperties = propertiesArray.length; // update prop number
+			}); // prop number update
+
+
+
+			// ref.$loaded.then('value', function(allPropSnapshot) {
+			//   	allPropSnapshot.forEach(function(propSnapshot) {
+			// 	    // Will be called with a messageSnapshot for each message under message_list.
+
+
+			// 	    var mtest = moment().unix().toString();
+			// 	    // var userId = propSnapshot.child('user_id').val();
+			// 	    // var text = propSnapshot.child('text').val();
+			// 	    // Do something with message.
+			//   	});
+			// });
+
+			// statusCheck.forEach($scope.properties, function(property) {
+			// 	property.propstatus;
+			// 	if (property.propowner == 'Allume') {
+			// 		property.propstatus = 'overdue';
+			// 	}
+			// });
+
+//Character
+
+			userCharactersObj.$loaded().then(function(data) { // wait til properties object is loaded then...
+				$rootScope.userCharactersObj = userCharactersObj; // load object into scope
+			}); //properties object loaded
+
+
+			userCharactersArray.$loaded().then(function(data) {
+				$rootScope.howManyCharacters = userCharactersArray.length; // load array into rootscope
+			}); //properties array loaded
+
+			userCharactersArray.$watch(function(event) { // watch array for changes
+				$rootScope.howManyCharacters = userCharactersArray.length; // load array into rootscope
+			}); // prop number update
+							
+
+
+			$scope.addProperty = function() { // add addProperty() to scope
+
+//				var compiledDuedate = 2015 + ', ' + $scope.propduemonth + '[, ' + $scope.propdueday + '[, ' +  $scope.propduehour + '[, ' + $scope.propduemin + ']]]';
+
+
+				// put it all togeter
+				var compiledDuedate = '2015-'+$scope.propduemonth+'-'+$scope.propdueday+'T'+$scope.propduehour+':'+$scope.propduemin+':'+'00';
+
+//				var compiledDuedate = "1994-11-05T13:15:30Z";
+//				1994-11-05T13:15:30Z
+
+				
+				var duedate = moment(compiledDuedate).local();
+				var duedateunix = moment(duedate).unix();
+				var duedateiso = moment(duedate).toISOString();
+				var duedatestring = duedateunix.toString();
+
+//				console.log(duedateMoment);
+
+				var compiledMomentDate = moment(duedate).format("ddd, MMM Do");
+				var compiledMomentTime = moment(duedate).format("h:mm a");
+//				var compiledMomentFromNow = moment(duedate).fromNow();
+
+
+				var compiledMomentDateString = compiledMomentDate.toString();
+				var compiledMomentTimeString = compiledMomentTime.toString();
+
+
+				propertiesInfo.$push({ // push info below as object to db
+						propowner: $scope.propowner,
+						proplocation: $scope.proplocation,
+						proptaxamount: $scope.proptaxamount,
+						propduedate: compiledMomentDateString,
+						propduemoment: duedatestring,
+						propduedateiso: duedateiso,
+						propduetime: compiledMomentTimeString,
+						propstatus: 'paid',
+						created: Firebase.ServerValue.TIMESTAMP
+				})
+				.then(function() { // once data is saved to db...
+//					$scope.propertyname = ''; // clear propertyname var attached to addProp text input field 
+//					$scope.duedateString = compiledMoment;
+					console.log('BING');
+					$timeout(function () {
+						
+//						statusCheck();
+					}, 500);
+				});
+
+			}// add property
+
+			$scope.deleteProperty = function(key) { // add deleteProperty to scope
+				var r = confirm('are you sure you want to delete this property?');
+				if (r == true) {
+
+					propertiesInfo.$remove(key); // remove key of base property item clicked on, deleteing obj from db
+				}
+			}
+
+			$scope.payTaxes = function(key) { 
+
+				var r = confirm('press OK to pay taxes');
+				if (r == true) {
+					var ref = new Firebase(FIREBASE_URL + '/users/' + authUser.uid + '/properties/' + key); 
+					var whichPropInfo = $firebase(ref);
+					var whichPropObj = whichPropInfo.$asObject();
+
+
+					whichPropObj.$loaded().then(function() {
+						var oldduedate = whichPropObj.propduedateiso;
+						var duedate = moment(oldduedate).add(7, 'days');
+		
+						var compiledMomentDate = moment(duedate).format("ddd, MMM Do");
+						var compiledMomentTime = moment(duedate).format("h:mm a");
+
+						var compiledMomentDateString = compiledMomentDate.toString();
+						var compiledMomentTimeString = compiledMomentTime.toString();
+		
+						var duedateunix = moment(duedate).unix();
+						var duedateiso = moment(duedate).toISOString();
+						var duedatestring = duedateunix.toString();
+
+
+						whichPropInfo.$update({
+							propduedate: compiledMomentDateString,
+							propduemoment: duedatestring,
+							propduedateiso: duedateiso,
+							propduetime: compiledMomentTimeString,
+							propstatus: 'paid'
+						});						
+						
+						statusCheck();
+
+
+
+					});
+
+		
+				}
+
+			}
+
+
+
+
+		}// user exists
+
+
+
+	});//getCurrentUser
+
+});// PropertiesController

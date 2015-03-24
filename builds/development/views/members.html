@@ -1,0 +1,36 @@
+<section class="properties cf">
+
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+
+	<div ng-show="signedIn()">
+
+		
+	<h1></h1>
+
+
+		<ul class="charlist">
+			<li ng-repeat="user in users">
+				<h2>{{user.mainChar}}</h2>
+				<ul >
+					<li ng-repeat="char in user.characters">
+						<h3>{{char.charname}} ({{char.charlvl}})</h3>
+						<ul id="proflist" align="center">
+							<li ng-repeat="(key,val) in char.prof">
+								<h4>{{key}} {{val}}</h4>									
+							</li>
+						</ul>
+					</li>
+				</ul>		
+			</li>
+		</ul>
+		
+
+	</div>	
+</section>

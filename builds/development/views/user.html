@@ -1,0 +1,100 @@
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+
+<div class="" ng-show="signedIn()">
+	
+
+	<h1>{{currentUser.mainChar}}</h1>
+
+
+	<h2>characters</h2>
+
+
+	<table ng-repeat="(key,char) in charactersArr | orderBy: 'charname'" class="log">
+		<th><a class="charname" ng-href="#/users/{{currentUser.regUser}}/characters/{{char.$id}}"><h2>{{char.charname}} ({{char.charlvl}})</h2></a></th>
+			<tr ng-repeat="(key,val) in char.prof">
+				<td class="left">
+					{{key}}
+				</td>
+					<td></td>
+				<td class="right char">
+					{{val}} 
+				</td>
+
+			</tr>
+	</table><br><br>
+
+
+	<form name="waterform" novalidate ng-submit="addCharacter()">
+		<h2>add a character</h2>
+
+		<input type="text" name="charname" placeholder="character name" autofocus ng-model="user.character.charname" ng-required="true">
+		<p class="error validationerror" ng-show="waterform.character.charname.$invalid && waterform.character.charname.$touched">character name required</p>
+
+		<input type="number" name="charlvl" placeholder="character level" ng-model="user.character.charlvl" ng-required="true">
+		<p class="error validationerror" ng-show="waterform.character.charlvl.$invalid && waterform.character.charlvl.$touched">character level required</p>
+
+
+		<button type="submit" class="btn" ng-disabled="wateform.$invalid">add character</button>
+	</form><br><br>
+
+		<div class="userinfo adminpanel" ng-show="currentUser.userClass == 'accountant' || currentUser.userClass == 'admin'">
+
+			<form name="waterform" novalidate ng-submit="editGuildBank()">
+				<h3>guild bank amount:</h3>
+				<input type="number" name="newBankAmount" placeholder="new amount" autofocus ng-model="newBankAmount" ng-required="true">
+		<!-- 
+				<p class="error validationerror" ng-show="waterform.character.charname.$invalid && waterform.character.charname.$touched">character name required</p>
+		 -->
+				<button type="submit" class="btn" ng-disabled="wateform.$invalid">~</button>
+			</form>
+
+
+				<div class="userinfo" ng-show="currentUser.userClass == 'admin'">
+
+					<form name="waterform" novalidate ng-submit="addPackType()">
+						<h3>add pack type:</h3>
+						<input type="text" name="packtype" placeholder="type of pack" autofocus ng-model="packtype" ng-required="true">
+						<input type="number" name="packvalue" placeholder="value of pack" autofocus ng-model="packvalue" ng-required="true">
+						
+						<select name="packorigin" class="propduemonth" ng-model="packorigin" ng-require="true">
+							<option value="" selected>pack origin</option>						
+							<option value="Sanddeep">Sanddeep</option>
+							<option value="Two Crowns">Two Crowns</option>
+							<option value="Lilyut Hills">Lilyut Hills</option>
+							<option value="Gweonid Forest">Gweonid Forest</option>
+							<option value="Dewstone">Dewstone</option>
+							<option value="Hellswamp">Hellswamp</option>
+							<option value="Karkasse">Karkasse</option>
+						</select>
+						
+				<!-- 
+						<p class="error validationerror" ng-show="waterform.character.charname.$invalid && waterform.character.charname.$touched">character name required</p>
+				 -->
+						<button type="submit" class="btn" ng-disabled="wateform.$invalid">~</button>
+					</form>
+						<table class="log">
+							<th>packs</th>
+								<tr ng-repeat="(key,packtype) in packtypes">
+									<td class="left">
+										{{packtype.packtype}}
+ 									</td>
+ 									<td class="right">
+			 								origin: {{packtype.packorigin}} <br>
+			 								est. value: {{packtype.packvalue}} gp/ea
+ 										
+ 									</td>
+ 								</tr>
+						</table>
+
+				</div>
+
+
+		</div>
+
+</div>

@@ -1,0 +1,50 @@
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+
+
+
+<div class="propcontents" ng-show="signedIn()">
+	
+
+	<h1>{{property.proplocation}}</h1>
+		
+
+	<h3>taxes due {{property.propduedate}} at {{property.propduetime}}</h3>
+
+	<br>
+	<h3>packs</h3>
+	<ul>
+		<li ng-repeat="(key, item) in packs">
+			<ul class="packlist cf">
+				<li ng-repeat="(key, pack) in item" class="pack">
+				<h3>{{item.$id}}</h3>
+					<span><timer end-time="pack.packtimer" max-time-unit="'day'">{{ddays}}:{{hhours}}:{{mminutes}}:{{sseconds}}</timer></span><br>
+					<button class="btn btn-delete tooltip" ng-click="deletePack(key, pack.packtype)">
+						<span>delete</span>
+					</button>
+				</li>
+			</ul>
+		</li>
+	</ul>
+
+
+	<form name="waterform" class="userinfo" novalidate ng-submit="addPack()">
+		<h3>add a pack</h3>
+
+		<select name="packtype" ng-model="packtype" ng-required="true">
+			<option value="" selected>pack type</option>
+			<option  ng-repeat="(key,packtype) in packtypes" value="{{packtype.packtype}}">{{packtype.packtype}}</option>
+		</select>
+
+
+		<button type="submit" class="btn" ng-disabled="wateform.$invalid">add pack</button>
+	</form>
+
+
+
+</div>

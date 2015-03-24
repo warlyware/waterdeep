@@ -1,0 +1,25 @@
+<div class="navbar navbar-default transparent">
+	<div class="containter">		
+		<div class="nabar-header">
+			<ul class="nav nav-pills nav-justified">
+				<!-- <li ><a ng-href="#/">waterdeep</a></li> -->
+				<li ng-show="signedIn()">
+					<a ng-href="#/properties">my properties</a>
+				</li>
+				<li ng-show="signedIn()">
+					<a ng-href="#/allproperties">all properties</a>
+				</li>
+				<li ng-hide="signedIn()"><a ng-href="#/login">login</a></li>
+		<!-- 		<li ng-show="signedIn()"><a ng-href="#/packs">packs <span ng-if="howManyPacks>0">({{howManyPacks}})</span></a></li> -->
+				<li ng-show="signedIn()"><a ng-href="#/members">members ({{howManyMembers}})</a></li>
+				<li ng-show="signedIn()"><a ng-href="#/guildbank">bank ({{guildbankAmt}} gp)</a></li>
+		 		<li ng-show="signedIn()" ><a ng-href="#/auction"><span>auctions</span></a></li>
+		 		<li ng-show="signedIn()" ><a ng-href="#/users/{{currentUser.regUser}}"><span>user</span></a></li>
+
+		<!-- 		<li ng-hide="signedIn()"><a ng-href="#/register">register</a></li>
+		 -->
+		 	</ul>
+	 	</div>
+
+ 	</div>
+</div>

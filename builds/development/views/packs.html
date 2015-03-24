@@ -1,0 +1,62 @@
+<section class="properties cf">
+
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+	</div>
+
+	<div ng-show="signedIn()">
+		<h1>all properties</h1>
+		<input type="checkbox" ng-model="propcheckbox.showall"> Properties
+			<div ng-repeat="user in users">
+				<div ng-if="user.$id==currentUser.$id" class="proplist">
+
+					<h1>{{user.mainChar}}</h1><br>
+					<hr width="30%">
+
+					<div ng-repeat="(key,value) in user">
+						
+						<div ng-if="key=='properties'">
+							<div ng-repeat="(key,i) in value">
+								<h2>{{key}}</h2> <br>
+								<hr width="30%">
+								<div class="properties property" ng-repeat="(key,property) in i | groupBy: property.propowner" ng-class="{'overdue' : property.propstatus == 'overdue'}">
+
+
+									<span><h3>{{property.proptype}}</h3> in </span><br>
+
+									<span><h3>{{property.proplocation}}</h3><span class="overduetext" ng-if="property.propstatus == 'overdue'">LATE</span> taxes due</span><br>
+									
+									<span ng-if="property.propstatus == 'paid'">
+									{{property.propduedate}} at {{property.propduetime}}<br>
+									<span><timer end-time="property.propduedateiso" max-time-unit="'day'">{{ddays}}:{{hhours}}:{{mminutes}}:{{sseconds}}</timer></span><br>					
+									</span>
+
+									<span ng-if="property.propstatus == 'duesoon'" class="duesoontext">
+									{{property.propduedate}} at {{property.propduetime}}<br>
+									<span><timer end-time="property.propduedateiso" max-time-unit="'day'">{{ddays}}:{{hhours}}:{{mminutes}}:{{sseconds}}</timer></span><br>					
+									</span>
+
+									<span ng-if="property.propstatus == 'overdue'" class="overduetext">{{property.propdemodateformatted}}<br>
+									<span><timer end-time="property.propdemodate">DEMOS in {{ddays}}:{{hhours}}:{{mminutes}}:{{sseconds}}</timer></span><br>
+									</span>
+
+									<span>amount due: {{property.proptaxamount}}</span><br>
+
+									<span ng-if="property.howmanypacks>0"><img height="40px" width="40px" ng-src="./images/pack.png" alt="pack icon"><br></span>
+
+									<a class="btn ng-tooltip" ng-href="#/propstats/{{property.user}}/{{property.propowner}}/{{key}}"><span>i</span></a>
+									<button class="btn btn-delete tooltip" ng-click="deleteProperty(key,property)"><span>delete</span></button>
+									<button class="btn btn-check tooltip" ng-click="payTaxes(key,property)"><span>pay taxes</span></button>
+								</div>
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>

@@ -1,0 +1,6 @@
+angularData = waterData
+myApp = waterApp
+meetings = properties
+myform = waterform
+checkins = propStats
+checkinsList = propcontents

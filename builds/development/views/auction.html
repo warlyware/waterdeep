@@ -1,0 +1,64 @@
+<section class="properties cf">
+
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+
+	<div ng-show="signedIn()">
+
+
+
+	<h1>auctions</h1>
+
+
+	<form class="formgroup" name="waterform" ng-submit="addAuction()" novalidate>
+		
+		<div class="inputwrapper">
+			<select name="itemtype" ng-model="itemtype" ng-require="true">
+				<option ng-repeat="val in auctions" value="{{val.$id}}">{{val.$id}}</option>
+				<option value="custom">... or add new item</option>
+			</select>
+			<input ng-show="itemtype=='custom'" type="text" name="itemtypeadd" ng-model="itemtypeadd" ng-require="true" placeholder="auction item">
+			<div class="gold">
+				<input type="number" name="itemvalueg" ng-model="itemvalueg" autofocus> g
+				<input type="number" name="itemvalues" ng-model="itemvalues"> s
+				<input type="number" name="itemvalueb" ng-model="itemvalueb"> b
+			</div>
+			
+			<button type="submit" class="btn" ng-disabled="waterform.$invalid">add</button>
+
+		</div>
+
+	
+	</form>
+	<br>
+	<hr width="30%">
+	<span><input type="text" ng-model="search.$id" placeholder="search listings"></span>
+	<table ng-repeat="val in auctions | filter:search" class="log">
+		<th><h2>{{val.$id}}</h2></th>
+			<tr ng-repeat="(key, item) in val">
+				<td class="left">
+					<span class="gold" ng-show="item.itemvalueg>0">{{item.itemvalueg}}g</span>
+					<span class="silver" ng-show="item.itemvalues>0">{{item.itemvalues}}s</span> 
+					<span class="bronze" ng-show="item.itemvalueb>0">{{item.itemvalueb}}b</span>
+				</td>
+				<td class="right">
+					<span class="date">
+						{{item.created | date:'short'}}					
+					</span>
+				</td>
+				<td>
+					<button class="btnclose tooltip" ng-click="deleteAuction(key,val)"><div class="close">x</div><span>delete</span></button>
+				</td>
+			</tr>
+	</table>
+
+	</div>	
+
+
+</section>

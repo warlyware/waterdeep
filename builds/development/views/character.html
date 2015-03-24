@@ -1,0 +1,78 @@
+<section class="properties cf">
+
+
+	<div class="sorry" ng-hide="signedIn()">
+		
+	you must be logged in to view this page
+
+		<div ng-include="'views/tlm.html'"></div>
+
+	</div>
+	
+	<div ng-show="signedIn()">
+
+	    <h2>{{character.charname}}</h2>
+		<h3>Level: {{character.charlvl}}</h3>
+		<button class="btn btn-delete tooltip" ng-click="deleteCharacter(character.$id)"><span>delete this character</span></button>			
+		<ul class="charlist cf">
+			<li ng-repeat="(key,val) in profs">
+				<h3>{{key}}</h3> <h4>{{val}}</h4>
+				<button class="btn btn-delete tooltip" ng-if="val=='<10k'" ng-click="deleteProf(key)"><span>delete</span></button>
+		
+			</li>
+		</ul><br><br>
+		
+
+		<div class="userinfo">
+			<form class="formgroup userinfo cf" name="waterform" ng-submit="addProf()" novalidate>
+				
+				<input type="number" placeholder="current level" name="charlvl" ng-model="charlvl">
+				<select name="profname" ng-model="profname">
+					<option value="" selected>proficiency type</option>
+					<option value="Alchemy">Alchemy</option>
+					<option value="Construction">Construction</option>
+					<option value="Cooking">Cooking</option>
+					<option value="Handicrafts">Handicrafts</option>
+					<option value="Husbandry">Husbandry</option>
+					<option value="Farming">Farming</option>
+					<option value="Fishing">Fishing</option>
+					<option value="Logging">Logging</option>
+					<option value="Gathering">Gathering</option>
+					<option value="Machining">Machining</option>
+					<option value="Metalwork">Metalwork</option>
+					<option value="Printing">Printing</option>
+					<option value="Mining">Mining</option>
+					<option value="Masonry">Masonry</option>
+					<option value="Tailoring">Tailoring</option>
+					<option value="Leatherwork">Leatherwork</option>
+					<option value="Weaponry">Weaponry</option>
+					<option value="Carpentry">Carpentry</option>
+					<option value="Larceny">Larceny</option>
+					<option value="Commerce">Commerce</option>
+					<option value="Composition">Compostion</option>
+				</select>
+
+				<select name="proflvl" ng-model="proflvl">
+					<option value="" selected>proficiency level</option>
+					<option value="<10k">&lt;10k</option>
+
+					<option value="10k+">10k+</option>
+					<option value="20k+">20k+</option>
+					<option value="30k+">30k+</option>
+					<option value="40k+">40k+</option>
+					<option value="50k+">50k+</option>
+					<option value="60k+">60k+</option>
+					<option value="70k+">70k+</option>
+					<option value="80k+">80k+</option>
+					<option value="90k">90k</option>
+
+				</select>
+
+				<button type="submit" class="btn" ng-disabled="waterform.$invalid">update</button>
+
+			</form>
+
+		</div>
+
+	</div>	
+</section>

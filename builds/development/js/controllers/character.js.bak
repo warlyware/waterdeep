@@ -1,0 +1,51 @@
+waterApp.controller('CharStatsController', function($routeParams, $scope, $rootScope, $firebase, $location, $firebaseSimpleLogin, FIREBASE_URL) {
+
+	$scope.whichcharacter = $routeParams.pId;
+	$scope.whichuser = $routeParams.uId;
+
+
+	var charRef = new Firebase(FIREBASE_URL + '/users/' + $scope.whichuser + '/characters/' + $scope.whichcharacter);
+	var profRef = new Firebase(FIREBASE_URL + '/users/' + $scope.whichuser + '/characters/' + $scope.whichcharacter + '/prof');
+
+	var profInfo = $firebase(profRef);
+	var profObj = $firebase(profRef).$asObject;
+	var profArray = $firebase(profRef).$asArray;
+
+
+	var charStatsInfo = $firebase(charRef);
+	var charStatsArray = $firebase(charRef).$asArray();
+	var charStatsObj = $firebase(charRef).$asObject();
+
+
+
+	charStatsObj.$loaded().then(function() {
+		$scope.charstats = charStatsObj; // load object into scope
+	});
+
+	// console.log();
+
+	if (profRef.$id != undefined) {
+		profObj.$loaded().then(function() {
+			$scope.charprof = profObj;
+		});		
+	}
+
+
+
+	$scope.addProf = function() {
+
+
+		var newData = {
+			profname: $scope.profname,
+//			packamount: $scope.pack.packamount,
+			proflvl: $scope.proflvl,
+//			created: Firebase.ServerValue.TIMESTAMP
+		}
+
+		profInfo.$push(newData).then(function(ref){
+
+		});
+
+	}
+
+});  
