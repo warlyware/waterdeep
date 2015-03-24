@@ -6,7 +6,7 @@ ArcheAge Guild Tools
 
 ##What?
 
-The goal of this project is to create a webapp with guild-based tools for [ArcheAge](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CC4QFjAA&url=http%3A%2F%2Fwww.archeagegame.com%2F&ei=YGYAVeG3BPeTsQSUoIDwDw&usg=AFQjCNHgURxtVBi1FIL_jHHfsMNRRnfGbQ&sig2=Gny2Vis_vOgGhYs9L9QP_A).  The projected features of the finished product are:
+The goal of this project is to create a webapp with guild-based tools for [ArcheAge](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&uact=8&ved=0CC4QFjAA&url=http%3A%2F%2Fwww.archeagegame.com%2F&ei=YGYAVeG3BPeTsQSUoIDwDw&usg=AFQjCNHgURxtVBi1FIL_jHHfsMNRRnfGbQ&sig2=Gny2Vis_vOgGhYs9L9QP_A).  The projected features of the finished include:
 
 1. User Page
 	>> This page allows users to create and maintain a set of characters and their professions.  Also integrates with properties pages.
@@ -26,8 +26,8 @@ The goal of this project is to create a webapp with guild-based tools for [Arche
 
 ##Why?
 
-I created this project as a way to learn JavaScript, AngularJS, and Bootstrap.  And ArcheAge is great.
+I created this project primarilly as a way to learn JavaScript, AngularJS, and Bootstrap.
 
 ##Technologies
 
-This project uses JavaScript, AngularJS, Bootstrap, Node.js, jQuery, and Moment.js.  It uses [Firebase](https://www.firebase.com/) as for the database and backend.
+This project uses JavaScript, AngularJS, Bootstrap, Node.js, jQuery, and Moment.js.  It uses [Firebase](https://www.firebase.com/) for the database and backend.
